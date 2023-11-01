@@ -1,0 +1,14 @@
+server:
+  name: XNET
+  host: 0.0.0.0
+  shutdownTimeout: 5s
+
+monitoring:
+  ui: 
+    container:
+      elasticsearch:
+        enabled: true
+
+elasticsearch:
+  hosts: http://es01:9200
+
