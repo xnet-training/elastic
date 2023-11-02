@@ -79,6 +79,7 @@ services:
      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
      - xpack.security.transport.ssl.verification_mode=certificate
      - xpack.license.self_generated.type=${LICENSE}
+     #- xpack.security.authc.api_key.enabled=true
     mem_limit: ${ES_MEM_LIMIT}
     #extra_hosts:
     #  es01: 127.0.0.1
@@ -108,20 +109,144 @@ services:
     labels:
       co.elastic.logs/module: kibana
     volumes:
-    #- ./kibana.yml:/usr/share/kibana/config/kibana.yml
+    - ./kibana.yml:/usr/share/kibana/config/kibana.yml
     - certs:/usr/share/kibana/config/certs
     - kibanadata:/usr/share/kibana/data
+    env_file: [ .env ]
     depends_on:
     - es01
     environment:
-    - SERVERNAME=kibana
-    - ELASTICSEARCH_HOSTS=https://es01:9200
-    - ELASTICSEARCH_USERNAME=kibana_system
-    - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
-    - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
-    - XPACK_SECURITY_ENCRYPTIONKEY=${ENCRYPTION_KEY}
-    - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${ENCRYPTION_KEY}
-    - XPACK_REPORTING_ENCRYPTIONKEY=${ENCRYPTION_KEY}
-    - xpack.reporting.roles.enabled=false
+      SERVERNAME: kibana
+      ELASTICSEARCH_HOSTS: https://es01:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: ${KIBANA_PASSWORD}
+      ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES: config/certs/ca/ca.crt
+      XPACK_SECURITY_ENCRYPTIONKEY: ${ENCRYPTION_KEY}
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: ${ENCRYPTION_KEY}
+      XPACK_REPORTING_ENCRYPTIONKEY: ${ENCRYPTION_KEY}
+      XPACK_FLEET_AGENTS_ELASTICSEARCH_HOSTS: '["https://es01:9200"]'
+    #- xpack.reporting.roles.enabled=false
+    mem_limit: ${KB_MEM_LIMIT}
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'" ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
     networks:
     - elastic
+  #
+  ## APM Server
+  #
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:${APM_VERSION:-8.10.4}
+    ports:
+    - ${APM_PORT:-8200}:8200
+    depends_on:
+    - es01
+    - kibana
+    env_file: [ .env ]
+    user: root
+    volumes:
+    - certs:/usr/share/apm-server/certs
+    - "./apm-server.yml:/usr/share/apm-server/apm-server.yml:ro"
+    environment:
+      #ELASTICSEARCH_HOSTS: https://es01:9200
+      ELASTIC_HOSTS: "es01:9200"
+      ELASTIC_USER: elastic 
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    networks:
+    - elastic
+  #
+  ## Logstash
+  #
+  logstash01:
+    depends_on:
+      es01:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    ports:
+    - "9600:9600"
+    - "9700:9700"
+    - "5044:5044"
+    labels:
+      co.elastic.logs/module: logstash
+    user: root
+    volumes:
+    - certs:/usr/share/logstash/certs
+    - logstashdata01:/usr/share/logstash/data
+    - "./logstash_ingest_data/:/usr/share/logstash/ingest_data/"
+    - "./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro"
+    environment:
+    - xpack.monitoring.enabled=false
+    - ELASTIC_USER=elastic
+    - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    - ELASTIC_HOSTS=https://es01:9200
+    networks:
+    - elastic
+  #
+  ## Fleet Server
+  #
+  #fleet-server:
+  #  image: docker.elastic.co/fleet-server/fleet-server:${FLEET_VERSION:-8.8.0}
+  #  ports:
+  #  - "8220:8220"
+  #  volumes:
+  #  - "./fleet-server.yml:/etc/fleet-server.yml:ro"
+  #  env_file: [ ".env" ]
+  #  environment:
+  #    ELASTICSEARCH_HOSTS: https://es01:9200
+  #    ELASTICSEARCH_SERVICE_TOKEN: changeme
+  #
+  ## Beat para metricas
+  #
+  metricbeat01:
+    depends_on:
+      es01:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+    image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
+    user: root
+    volumes:
+    - certs:/usr/share/metricbeat/certs
+    - metricbeatdata01:/usr/share/metricbeat/data
+    - "./metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro"
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
+    - "/proc:/hostfs/proc:ro"
+    - "/:/hostfs:ro"
+    environment:
+    - ELASTIC_USER=elastic
+    - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    - ELASTIC_HOSTS=https://es01:9200
+    - KIBANA_HOSTS=http://kibana:5601
+    - LOGSTASH_HOSTS=http://logstash01:9600
+    networks:
+    - elastic
+  #
+  ## Beat para file
+  #
+  filebeat01:
+    depends_on:
+      es01:
+        condition: service_healthy
+    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+    user: root
+    volumes:
+    - certs:/usr/share/filebeat/certs
+    - filebeatdata01:/usr/share/filebeat/data
+    - "./filebeat_ingest_data/:/usr/share/filebeat/ingest_data/"
+    - "./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
+    - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+    - ELASTIC_USER=elastic
+    - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    - ELASTIC_HOSTS=https://es01:9200
+    - KIBANA_HOSTS=http://kibana:5601
+    - LOGSTASH_HOSTS=http://logstash01:9600
+    networks:
+    - elastic
+

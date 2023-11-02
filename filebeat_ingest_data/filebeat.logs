@@ -1,0 +1,32 @@
+2023-11-01 19:05:39.741  INFO 22956 --- [           main] c.c.b.c.p.OpenApiGeneratorApplication    : Starting OpenApiGeneratorApplication v1.0-SNAPSHOT using Java 15.0.2 on IAP-TRIA with PID 22956 (D:\01-CROSSNET\01-PROJECTS\05-CajaCusco\customerloan\api\target\microservicio-api.jar started by ilver in D:\01-CROSSNET\01-PROJECTS\05-CajaCusco\customerloan)
+2023-11-01 19:05:39.861  INFO 22956 --- [           main] c.c.b.c.p.OpenApiGeneratorApplication    : The following 1 profile is active: "dev"
+2023-11-01 19:05:46.095  INFO 22956 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-11-01 19:05:46.173  INFO 22956 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 0 JPA repository interfaces.
+2023-11-01 19:05:47.312  INFO 22956 --- [           main] o.s.c.c.s.GenericScope                   : BeanFactory id=8af9bc1f-f8fa-3e70-b85e-a4cc241fedad
+2023-11-01 19:05:50.639  INFO 22956 --- [           main] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8082 (http)
+2023-11-01 19:05:50.705  INFO 22956 --- [           main] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2023-11-01 19:05:50.708  INFO 22956 --- [           main] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.62]
+2023-11-01 19:05:50.985  INFO 22956 --- [           main] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2023-11-01 19:05:50.988  INFO 22956 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 10900 ms
+2023-11-01 19:05:51,763 [main] INFO  co.elastic.apm.agent.micrometer.MicrometerMetricsReporter - Registering Micrometer MeterRegistry: io.micrometer.prometheus.PrometheusMeterRegistry@2c3b0cc8
+2023-11-01 19:05:53.425  INFO 22956 --- [           main] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-11-01 19:05:53.891  INFO 22956 --- [           main] o.h.Version                              : HHH000412: Hibernate ORM core version 5.4.33
+2023-11-01 19:05:54.416  INFO 22956 --- [           main] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-11-01 19:05:54.952  INFO 22956 --- [           main] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2023-11-01 19:05:57.020  INFO 22956 --- [           main] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2023-11-01 19:05:57.154  INFO 22956 --- [           main] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2023-11-01 19:05:58.927  INFO 22956 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-11-01 19:05:58.984  INFO 22956 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-11-01 19:06:00.355  WARN 22956 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-11-01 19:06:11.086  INFO 22956 --- [           main] o.s.c.c.u.InetUtils                      : Cannot determine local hostname
+2023-11-01 19:06:13.370  INFO 22956 --- [           main] o.s.c.c.u.InetUtils                      : Cannot determine local hostname
+2023-11-01 19:06:13.427  INFO 22956 --- [           main] o.s.b.a.e.w.EndpointLinksResolver        : Exposing 1 endpoint(s) beneath base path '/actuator'
+2023-11-01 19:06:13.616  INFO 22956 --- [           main] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8082 (http) with context path ''
+2023-11-01 19:06:15.240  INFO 22956 --- [           main] o.s.c.c.u.InetUtils                      : Cannot determine local hostname
+2023-11-01 19:06:16.707  INFO 22956 --- [           main] o.s.c.c.u.InetUtils                      : Cannot determine local hostname
+2023-11-01 19:06:16.786  INFO 22956 --- [           main] c.c.b.c.p.OpenApiGeneratorApplication    : Started OpenApiGeneratorApplication in 42.185 seconds (JVM running for 55.608)
+2023-11-01 19:08:03,884 [http-nio-8082-exec-3] INFO  co.elastic.apm.agent.servlet.ServletVersionInstrumentation - Servlet container info = Apache Tomcat/9.0.62
+2023-11-01 19:08:03.890  INFO 22956 --- [nio-8082-exec-3] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-11-01 19:08:03.891  INFO 22956 --- [nio-8082-exec-3] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2023-11-01 19:08:03.896  INFO 22956 --- [nio-8082-exec-3] o.s.w.s.DispatcherServlet                : Completed initialization in 3 ms
+2023-11-01 19:08:08.179  INFO 22956 --- [nio-8082-exec-8] o.s.a.AbstractOpenApiResource            : Init duration for springdoc-openapi is: 1582 ms
