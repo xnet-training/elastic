@@ -188,16 +188,24 @@ services:
   #
   ## Fleet Server
   #
-  #fleet-server:
-  #  image: docker.elastic.co/fleet-server/fleet-server:${FLEET_VERSION:-8.8.0}
-  #  ports:
-  #  - "8220:8220"
-  #  volumes:
-  #  - "./fleet-server.yml:/etc/fleet-server.yml:ro"
+  fleet-server:
+    image: docker.elastic.co/elastic/fleet-server:latest
+  #docker.elastic.co/fleet-server/fleet-server:${FLEET_VERSION:-8.8.0}
+    ports:
+    - "8220:8220"
+    volumes:
+    - "./fleet-server.yml:/etc/fleet-server.yml:ro"
+    - "certs:/etc/fleet-server/certs"
   #  env_file: [ ".env" ]
-  #  environment:
-  #    ELASTICSEARCH_HOSTS: https://es01:9200
-  #    ELASTICSEARCH_SERVICE_TOKEN: changeme
+    environment:
+      ELASTICSEARCH_HOSTS: https://es01:9200
+      ELASTICSEARCH_SERVICE_TOKEN: changeme
+      ELASTICSEARCH_CA_CERT: /etc/fleet-server/certs/ca/ca.pem
+      ELASTIC_USER: elastic
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    networks:
+    - elastic
+
   #
   ## Beat para metricas
   #
