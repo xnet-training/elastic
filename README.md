@@ -1,5 +1,22 @@
-# elastic
+# Elastic Stack
 Material de ejercicios sobre Elastic
+
+## Requisitos Básicos
+
+Se requiere tener instalado en las PC los siguientes productos
+
+| Producto | Version | Punto de Descarga |
+|-|-|-|
+|Oracle Virtual Box o Similar| v7.0.12 | https://download.virtualbox.org/virtualbox/7.0.12/VirtualBox-7.0.12-159484-Win.exe |
+|Visual Studio Code|v1.82.2|https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user|
+|Oracle NetBeans|v8.2|https://www.jetbrains.com/datagrip/download/download-thanks.html?platform=windows|
+
+Se requiere tener creada una Virtual Machine con los siguientes productos:
+
+1. Sistema Operativo|virtualbox centos 8 / Ubunto 22.04
+2. Docker: [GUia de Instalación](https://docs.docker.com/engine/install/ubuntu/)
+3. Docker Compose: [Guia de Instalación](https://docs.docker.com/compose/install/standalone/)
+4. Cliente Git: [Guia de Instalación](https://www.digitalocean.com/community/tutorials/how-to-install-git-on-ubuntu-22-04)
 
 ## Iniciar Plataforma
 
