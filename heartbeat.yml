@@ -1,0 +1,44 @@
+output:
+  elasticsearch:
+    hosts: [ "es01:9200" ]
+    protocol: "https"
+    username: "elastic"
+    password: "changeme"
+    ssl:
+      verification_mode: "none"
+
+setup:
+  kibana:
+    host: kibana:5601
+  ilm:
+    enabled: true
+
+heartbeat:
+  #
+  ## synthetics/tcp synthetics/synthetic icmp http synthetics/http synthetics/icmp tcp browser synthetic
+  #
+  #
+  # URL: https://github.com/xeraa/elastic-docker/blob/master/full_stack/config/beats/heartbeat/heartbeat.yml
+  monitors:
+  - id: kibana
+    name: Kibana UI
+    type: http
+    urls: ["http://kibana:5601"]
+    schedule: "@every 10s"
+    #check.request.method: HEAD
+    #check.response.status: [200]
+  - id: es01
+    name: Elasticsearch
+    type: http
+    urls: ["https://es01:9200"]
+    schedule: "@every 10s"
+    username: elastic
+    password: changeme
+    check.request.method: HEAD
+    check.response.status: [200]
+    ssl.verification_mode: none
+  ssl.verification_mode: none
+  #- name: vehiculos
+  #  type: http
+  #  urls: ["https://api.prod.comsatel.com.pe/vehiculos/swagger-ui/index.html"]
+  #  schedule: "@every 10s"
