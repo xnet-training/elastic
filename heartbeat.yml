@@ -27,6 +27,26 @@ heartbeat:
     schedule: "@every 10s"
     #check.request.method: HEAD
     #check.response.status: [200]
+  - id: portal-caja-cusco
+    name: Portal Caja Cusco
+    type: http
+    urls: ["http://www.cmac-cusco.com.pe/"]
+    schedule: "@every 10s"
+    enabled: false
+  - id: ms-consumer-loan
+    name: SD Consumer Loan
+    urls:
+    - http://172.17.8.1:8082/actuator/health
+    schedule: "@every 10s"
+    type: http
+  - id: bd-consumer-loan
+    name: BD Consumer Load
+    type: tcp
+    hosts:
+    - 172.17.8.220
+    ports:
+    - 3306
+    schedule: "@every 10s"
   - id: es01
     name: Elasticsearch
     type: http
