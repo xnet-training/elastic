@@ -1,0 +1,6 @@
+- name: Install ELK Stack
+  hosts: localhost
+  connection: local
+  become: no
+  roles:
+  - elasticsearch

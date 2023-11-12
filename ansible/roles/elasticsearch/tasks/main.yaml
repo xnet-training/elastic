@@ -1,0 +1,26 @@
+- name: get installed
+  get_url:
+    url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{es.version }}-linux-x86_64.tar.gz"
+    dest: /tmp/es.tar.gz
+
+- name: ensure es home
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /opt/elk/data/es/data
+  - /opt/elk/data/es/logs
+  - /opt/elk/data/es/config
+
+- name: unpack
+  ansible.builtin.unarchive:
+    src: /tmp/es.tar.gz
+    dest: /opt/elk
+
+- name: ensure configuration
+  ansible.builtin.template:
+    src: "templates/{{ item.src }}"
+    dest: "{{ item.target }}"
+  with_items:
+  - src: elasticsearch.yml.j2
+    target: "/opt/elk/elasticsearch-{{es.version }}/config/elasticsearch.yml"
