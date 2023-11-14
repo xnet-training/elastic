@@ -3,4 +3,5 @@
   connection: local
   become: no
   roles:
-  - elasticsearch
+  #- elasticsearch
+  - kibana

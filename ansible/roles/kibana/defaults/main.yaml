@@ -1,0 +1,13 @@
+kibana:
+  version: 8.11.0
+
+  # Configuracion del Servidor
+  server:
+    port: 5601
+    host: "172.17.8.220"
+  #
+  ## Elasticsearch conneciton
+  #
+  es:
+    host: 'http://localhost:9200'
+    token: "eyJ2ZXIiOiI4LjExLjAiLCJhZHIiOlsiMTAuMC4yLjE1OjkyMDAiXSwiZmdyIjoiMjgzMjMzZjYzM2QyNzA1ZDAyNGI3ZGJlYjUzMDIwOGQ5YmRkZmRjYTAzZmFlNWMwNDJjNzM4ZTcwNGE3ZTUxOCIsImtleSI6ImFDLWV4SXNCU29lUXJiaThFb1ZYOjRiSktIV2ZjUlJ1WTBJT1lvR2pIdXcifQ=="

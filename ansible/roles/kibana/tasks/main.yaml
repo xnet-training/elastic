@@ -1,0 +1,28 @@
+- name: get installed
+  get_url:
+    url: "https://artifacts.elastic.co/downloads/kibana/kibana-{{ kibana.version | default('8.11.0') }}-linux-x86_64.tar.gz"
+    dest: /tmp/kibana.tar.gz
+
+- name: ensure Kibana home
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /opt/elk/data/kibana/data
+  - /opt/elk/data/kibana/logs
+  - /opt/elk/data/kibana/config
+
+- name: unpack Kibana
+  ansible.builtin.unarchive:
+    src: /tmp/kibana.tar.gz
+    dest: /opt/elk
+
+- name: ensure configuration
+  ansible.builtin.template:
+    src: "templates/{{ item.src }}"
+    dest: "/opt/elk/kibana-{{ kibana.version | default('8.11.0') }}/config/{{ item.target }}"
+  with_items:
+  - src: kibana.yml.j2
+    target: "kibana.yml"
+  - src: node.options.j2
+    target: "node.options" 
